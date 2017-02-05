@@ -3,7 +3,6 @@
 namespace Hareku\LaravelFollow\Traits;
 
 use Hareku\LaravelFollow\Models\FollowRelationship;
-use Hareku\LaravelFollow\Models\FollowRelationshipForPivot;
 use Carbon\Carbon;
 
 trait Followable
