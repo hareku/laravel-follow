@@ -189,4 +189,37 @@ class FollowTest extends TestCase
         $followerIds[] = $notFollower->id;
         $this->assertFalse($followee->isFollowedBy($followerIds));
     }
+
+    /** @test */
+    public function it_reject_now_follower()
+    {
+        $followee = $this->createUser();
+        $followers = $this->createUser([], 3);
+        $followerIds = $followers->pluck('id')->toArray();
+        $notFollowerIds = $this->createUser([], 3)->pluck('id')->toArray();
+
+        foreach ($followers as $follower) {
+            $follower->follow($followee->id);
+        }
+
+        $this->assertEquals(
+            $followerIds,
+            $followee->rejectNotFollower(array_merge($followerIds, $notFollowerIds))
+        );
+    }
+
+    /** @test */
+    public function it_reject_now_followee()
+    {
+        $follower = $this->createUser();
+        $followeeIds = $this->createUser([], 3)->pluck('id')->toArray();
+        $notFolloweeIds = $this->createUser([], 3)->pluck('id')->toArray();
+
+        $follower->follow($followeeIds);
+
+        $this->assertEquals(
+            $followeeIds,
+            $follower->rejectNotFollowee(array_merge($followeeIds, $notFolloweeIds))
+        );
+    }
 }

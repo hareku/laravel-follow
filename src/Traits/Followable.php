@@ -122,4 +122,32 @@ trait Followable
     {
         return $this->isFollowing($id) && $this->isFollowedBy($id);
     }
+
+    /**
+     * Reject IDs that is not a follower from the given array.
+     *
+     * @param  array  $ids
+     * @return array
+     */
+    public function rejectNotFollower(array $ids)
+    {
+        return FollowRelationship::where('followee_id', $this->id)
+                                ->whereIn('follower_id', $ids)
+                                ->pluck('follower_id')
+                                ->toArray();
+    }
+
+    /**
+     * Reject an ID that is not followee from the given array.
+     *
+     * @param  array  $ids
+     * @return array
+     */
+    public function rejectNotFollowee(array $ids)
+    {
+        return FollowRelationship::where('follower_id', $this->id)
+                                ->whereIn('followee_id', $ids)
+                                ->pluck('followee_id')
+                                ->toArray();
+    }
 }
