@@ -71,13 +71,13 @@ $user->followees()->paginate();
 $user->followeeRelationships()->paginate();
 ```
 
-### Check if follow
+### Check if follow.
 ```php
 $user->isFollowing(1);
 $user->isFollowing([1,2,3,4]);
 ```
 
-### Check if followed by
+### Check if followed by.
 
 ```php
 $user->isFollowedBy(1);
