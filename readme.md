@@ -71,17 +71,29 @@ $user->followees()->paginate();
 $user->followeeRelationships()->paginate();
 ```
 
-### Check if follow
+### Check if follow.
 ```php
 $user->isFollowing(1);
 $user->isFollowing([1,2,3,4]);
 ```
 
-### Check if followed by
+### Check if followed by.
 
 ```php
 $user->isFollowedBy(1);
 $user->isFollowedBy([1,2,3,4]);
+```
+
+### Reject user ids.
+
+```php
+$user->follow([1,2,3]);
+$user->rejectNotFollowee([1,2,3,4,5]); // [1,2,3]
+```
+
+```php
+$user->followers()->pluck('id'); // [1,2,3]
+$user->rejectNotFollower([1,2,3,4,5]); // [1,2,3]
 ```
 
 ## License
