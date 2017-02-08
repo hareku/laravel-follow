@@ -84,6 +84,18 @@ $user->isFollowedBy(1);
 $user->isFollowedBy([1,2,3,4]);
 ```
 
+### Reject user ids.
+
+```php
+$user->follow([1,2,3]);
+$user->rejectNotFollowee([1,2,3,4,5]); // [1,2,3]
+```
+
+```php
+$user->followers()->pluck('id'); // [1,2,3]
+$user->rejectNotFollower([1,2,3,4,5]); // [1,2,3]
+```
+
 ## License
 
 MIT
