@@ -58,7 +58,7 @@ trait Followable
      * Unfollow.
      *
      * @param  array|int  $ids
-     * @return array
+     * @return int
      */
     public function unfollow($ids)
     {
