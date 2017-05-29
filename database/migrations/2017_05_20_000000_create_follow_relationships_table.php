@@ -53,6 +53,8 @@ class CreateFollowRelationshipsTable extends Migration
             $table->unsignedInteger('followee_id');
             $table->timestamp('followed_at');
 
+            $table->unique(['follower_id', 'followee_id']);
+
             $key = $this->userKeyName();
             $tableName = $this->usersTableName();
 
