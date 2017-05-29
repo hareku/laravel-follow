@@ -194,6 +194,47 @@ class FollowableTest extends TestCase
     }
 
     /** @test */
+    public function it_gets_follower_ids()
+    {
+        $followee = $this->createUser();
+        $followers = $this->createUsers(3);
+
+        foreach ($followers as $follower) {
+            $follower->follow($followee->id);
+        }
+
+        $this->assertEquals(
+            $followee->followerIds(),
+            $followers->pluck('id')->toArray()
+        );
+
+        $this->assertEquals(
+            $followee->followerIds(true),
+            $followers->pluck('id')
+        );
+    }
+
+    /** @test */
+    public function it_gets_followee_ids()
+    {
+        $follower = $this->createUser();
+        $followees = $this->createUsers(3);
+        $followeeIds = $followees->pluck('id');
+
+        $follower->follow($followeeIds->toArray());
+
+        $this->assertEquals(
+            $follower->followeeIds(),
+            $followeeIds->toArray()
+        );
+
+        $this->assertEquals(
+            $follower->followeeIds(true),
+            $followeeIds
+        );
+    }
+
+    /** @test */
     public function it_rejects_not_follower_ids()
     {
         $followee = $this->createUser();
