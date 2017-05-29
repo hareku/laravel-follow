@@ -13,11 +13,14 @@ class FollowServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->publishes([
+            __DIR__.'/../config/follow.php' => config_path('follow.php'),
+        ]);
         $this->mergeConfigFrom(
             __DIR__.'/../config/follow.php', 'follow'
         );
 
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations/2017_05_20_000000_create_follow_relationships_table.php');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations/');
     }
 
     /**
