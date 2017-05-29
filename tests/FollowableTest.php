@@ -181,6 +181,19 @@ class FollowableTest extends TestCase
     }
 
     /** @test */
+    public function it_checks_if_user_is_mutual_follow()
+    {
+        $follower = $this->createUser();
+        $followee = $this->createUser();
+
+        $follower->follow($followee->id);
+        $followee->follow($follower->id);
+
+        $this->assertTrue($follower->isMutual($followee->id));
+        $this->assertTrue($followee->isMutual($follower->id));
+    }
+
+    /** @test */
     public function it_rejects_not_follower_ids()
     {
         $followee = $this->createUser();
