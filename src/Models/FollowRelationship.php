@@ -35,8 +35,9 @@ class FollowRelationship extends Model
      */
     public function __construct(array $attributes = [])
     {
-        $this->table = config('follow.table_name');
         parent::__construct($attributes);
+
+        $this->table = config('follow.table_name');
     }
 
     /**

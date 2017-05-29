@@ -3,42 +3,54 @@
 namespace Hareku\LaravelFollow\Traits;
 
 use Hareku\LaravelFollow\Models\FollowRelationship;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Carbon\Carbon;
 
 trait Followable
 {
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function followerRelationships()
+    public function followerRelationships(): HasMany
     {
         return $this->hasMany(FollowRelationship::class, 'followee_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function followeeRelationships()
+    public function followeeRelationships(): HasMany
     {
         return $this->hasMany(FollowRelationship::class, 'follower_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
-    public function followers()
+    public function followers(): BelongsToMany
     {
-        return $this->belongsToMany(config('follow.user'), config('follow.table_name'), 'followee_id', 'follower_id')
-                    ->withPivot('followed_at');
+        return $this->belongsToMany(
+                config('follow.user'),
+                config('follow.table_name'),
+                'followee_id',
+                'follower_id'
+            )
+            ->withPivot('followed_at');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
-    public function followees()
+    public function followees(): BelongsToMany
     {
-        return $this->belongsToMany(config('follow.user'), config('follow.table_name'), 'follower_id', 'followee_id')
-                    ->withPivot('followed_at');
+        return $this->belongsToMany(
+                config('follow.user'),
+                config('follow.table_name'),
+                'follower_id',
+                'followee_id'
+            )
+            ->withPivot('followed_at');
     }
 
     /**
@@ -47,7 +59,7 @@ trait Followable
      * @param  array|int  $ids
      * @return array
      */
-    public function follow($ids)
+    public function follow($ids): array
     {
         $ids = $this->mergeFollowedAt((array) $ids);
 
@@ -57,21 +69,21 @@ trait Followable
     /**
      * Unfollow.
      *
-     * @param  array|int  $ids
-     * @return array
+     * @param  mixed  $ids
+     * @return int
      */
-    public function unfollow($ids)
+    public function unfollow($ids): int
     {
-        return $this->followees()->detach((array) $ids);
+        return $this->followees()->detach($ids);
     }
 
     /**
-     * Merge followed_at to array for intermediate table.
+     * Merge followed_at to array for relationships table.
      *
      * @param  array  $ids
      * @return array
      */
-    private function mergeFollowedAt(array $ids)
+    private function mergeFollowedAt(array $ids): array
     {
         $followedAt = new Carbon;
 
@@ -88,7 +100,7 @@ trait Followable
      * @param  array|int  $id
      * @return bool
      */
-    public function isFollowing($id)
+    public function isFollowing($id): bool
     {
         if (is_array($id)) {
             return count($id) === $this->followees()->whereIn('followee_id', $id)->count();
@@ -103,7 +115,7 @@ trait Followable
      * @param  array|int  $id
      * @return bool
      */
-    public function isFollowedBy($id)
+    public function isFollowedBy($id): bool
     {
         if (is_array($id)) {
             return count($id) === $this->followers()->whereIn('follower_id', $id)->count();
@@ -118,7 +130,7 @@ trait Followable
      * @param  array|int  $id
      * @return bool
      */
-    public function isMutual($id)
+    public function isMutual($id): bool
     {
         return $this->isFollowing($id) && $this->isFollowedBy($id);
     }
@@ -129,7 +141,7 @@ trait Followable
      * @param  array  $ids
      * @return array
      */
-    public function rejectNotFollower(array $ids)
+    public function rejectNotFollower(array $ids): array
     {
         return FollowRelationship::where('followee_id', $this->id)
                                 ->whereIn('follower_id', $ids)
@@ -143,7 +155,7 @@ trait Followable
      * @param  array  $ids
      * @return array
      */
-    public function rejectNotFollowee(array $ids)
+    public function rejectNotFollowee(array $ids): array
     {
         return FollowRelationship::where('follower_id', $this->id)
                                 ->whereIn('followee_id', $ids)
