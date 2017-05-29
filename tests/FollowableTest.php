@@ -9,8 +9,30 @@ class FollowableTest extends TestCase
 {
     use DatabaseTransactions;
 
+    // /**
+    //  * Create users.
+    //  *
+    //  * @param  int  $amount
+    //  * @return Collection
+    //  */
+    // protected function createUsers(int $amount = 3)
+    // {
+    //     return factory(User::class, $amount)->create();
+    // }
+    //
+    // /**
+    //  * Create a user.
+    //  *
+    //  * @param  array  $override
+    //  * @return User
+    //  */
+    // protected function createUser(array $override = []): User
+    // {
+    //     return factory(User::class)->create($override);
+    // }
+
     /** @test */
-    public function it_follow_user()
+    public function it_follows_user()
     {
         $follower = $this->createUser();
         $followee = $this->createUser();
@@ -24,10 +46,10 @@ class FollowableTest extends TestCase
     }
 
     /** @test */
-    public function it_follow_many_users()
+    public function it_follows_many_users()
     {
         $follower = $this->createUser();
-        $followees = $this->createUser([], 3);
+        $followees = $this->createUsers(3);
 
         $follower->follow($followees->pluck('id')->toArray());
 
@@ -40,7 +62,7 @@ class FollowableTest extends TestCase
     }
 
     /** @test */
-    public function it_follow_same_user()
+    public function it_follows_same_user()
     {
         $follower = $this->createUser();
         $followee = $this->createUser();
@@ -48,39 +70,25 @@ class FollowableTest extends TestCase
         $follower->follow($followee->id);
         $follower->follow($followee->id);
 
-        $this->assertEquals(1, $follower->followees()->count());
+        $this->assertSame(1, $follower->followees()->count());
     }
 
     /** @test */
-    public function it_get_followers()
+    public function it_gets_followers_and_followees()
     {
         $follower = $this->createUser();
         $followee = $this->createUser();
 
         $follower->follow($followee->id);
 
-        $this->assertEquals(1, $follower->followees()->count());
-        $this->assertEquals(1, $follower->followeeRelationships()->count());
-        $this->assertEquals(0, $follower->followers()->count());
-        $this->assertEquals(0, $follower->followerRelationships()->count());
+        $this->assertSame(1, $follower->followees()->count());
+        $this->assertSame(1, $follower->followeeRelationships()->count());
+        $this->assertSame(0, $follower->followers()->count());
+        $this->assertSame(0, $follower->followerRelationships()->count());
     }
 
     /** @test */
-    public function it_get_followees()
-    {
-        $followee = $this->createUser();
-        $follower = $this->createUser();
-
-        $follower->follow($followee->id);
-
-        $this->assertEquals(1, $followee->followers()->count());
-        $this->assertEquals(1, $followee->followerRelationships()->count());
-        $this->assertEquals(0, $followee->followees()->count());
-        $this->assertEquals(0, $followee->followeeRelationships()->count());
-    }
-
-    /** @test */
-    public function it_unfollow_user()
+    public function it_unfollows_user()
     {
         $follower = $this->createUser();
         $followee = $this->createUser();
@@ -95,10 +103,10 @@ class FollowableTest extends TestCase
     }
 
     /** @test */
-    public function it_unfollow_many_users()
+    public function it_unfollows_many_users()
     {
         $follower = $this->createUser();
-        $followees = $this->createUser([], 3);
+        $followees = $this->createUsers(3);
 
         $followeeIds = $followees->pluck('id')->toArray();
         $follower->follow($followeeIds);
@@ -113,7 +121,7 @@ class FollowableTest extends TestCase
     }
 
     /** @test */
-    public function it_check_user_is_following()
+    public function it_checks_if_user_is_following()
     {
         $follower = $this->createUser();
         $followee = $this->createUser();
@@ -126,10 +134,10 @@ class FollowableTest extends TestCase
     }
 
     /** @test */
-    public function it_check_user_is_following_if_array()
+    public function it_checks_if_user_is_following_for_array()
     {
         $follower = $this->createUser();
-        $followees = $this->createUser([], 3);
+        $followees = $this->createUsers(3);
         $notFollowee = $this->createUser();
         $followeeIds = $followees->pluck('id')->toArray();
 
@@ -142,7 +150,7 @@ class FollowableTest extends TestCase
     }
 
     /** @test */
-    public function it_check_user_is_being_followed()
+    public function it_checks_if_user_is_being_followed()
     {
         $followee = $this->createUser();
         $follower = $this->createUser();
@@ -155,10 +163,10 @@ class FollowableTest extends TestCase
     }
 
     /** @test */
-    public function it_check_user_is_being_followed_if_array()
+    public function it_checks_if_user_is_being_followed_for_array()
     {
         $followee = $this->createUser();
-        $followers = $this->createUser([], 3);
+        $followers = $this->createUsers(3);
         $notFollower = $this->createUser();
         $followerIds = $followers->pluck('id')->toArray();
 
@@ -173,33 +181,33 @@ class FollowableTest extends TestCase
     }
 
     /** @test */
-    public function it_reject_now_follower()
+    public function it_rejects_not_follower_ids()
     {
         $followee = $this->createUser();
-        $followers = $this->createUser([], 3);
+        $followers = $this->createUsers(3);
         $followerIds = $followers->pluck('id')->toArray();
-        $notFollowerIds = $this->createUser([], 3)->pluck('id')->toArray();
+        $notFollowerIds = $this->createUsers(3)->pluck('id')->toArray();
 
         foreach ($followers as $follower) {
             $follower->follow($followee->id);
         }
 
-        $this->assertEquals(
+        $this->assertSame(
             $followerIds,
             $followee->rejectNotFollower(array_merge($followerIds, $notFollowerIds))
         );
     }
 
     /** @test */
-    public function it_reject_now_followee()
+    public function it_rejects_not_followee_ids()
     {
         $follower = $this->createUser();
-        $followeeIds = $this->createUser([], 3)->pluck('id')->toArray();
-        $notFolloweeIds = $this->createUser([], 3)->pluck('id')->toArray();
+        $followeeIds = $this->createUsers(3)->pluck('id')->toArray();
+        $notFolloweeIds = $this->createUsers(3)->pluck('id')->toArray();
 
         $follower->follow($followeeIds);
 
-        $this->assertEquals(
+        $this->assertSame(
             $followeeIds,
             $follower->rejectNotFollowee(array_merge($followeeIds, $notFolloweeIds))
         );
