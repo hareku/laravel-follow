@@ -1,11 +1,13 @@
 # Laravel 5 Follow System
 
-This package helps you to add user based follow system to your model.
+This package helps you to add user follow system to your project.
 
 * So simply and easy.
 * Use "ON DELETE CASCADE" in follow relationships table.
 
-*Support Laravel 5.4~*
+## Require
+- *Support Laravel 5.4~*  
+- *Required php >=7.0* (v1.* >=5.6.4)
 
 ## Installation
 
@@ -21,10 +23,7 @@ And then, include the service provider within `config/app.php`.
 ];
 ```
 
-Publish the migrations and config.
-
-* create_follow_relationships_table.php (migrations)
-* follow.php (config)
+Publish the config file. (follow.php)
 
 ```sh
 $ php artisan vendor:publish --provider="Hareku\LaravelFollow\FollowServiceProvider"
@@ -43,48 +42,46 @@ class User extends Model
 
 ## Usage
 
-### Follow a user or users.
+### Follow a user or users
 
 ```php
 $user->follow(1);
 $user->follow([1,2,3,4]);
 ```
 
-### Unfollow a user or users.
+### Unfollow a user or users
 
 ```php
 $user->unfollow(1);
 $user->unfollow([1,2,3,4]);
 ```
 
-### Get followers.
+### Get followers / followees
 
 ```php
-$user->followers()->paginate();
-$user->followerRelationships()->paginate();
+// followers
+$user->followers()->get(); // Get follower user models.
+$user->followerRelationships()->get(); // Get follower relationship models.
+
+// followees
+$user->followees()->get();
+$user->followeeRelationships()->get();
 ```
 
-### Get followees.
-
-```php
-$user->followees()->paginate();
-$user->followeeRelationships()->paginate();
-```
-
-### Check if follow.
+### Check if follow
 ```php
 $user->isFollowing(1);
 $user->isFollowing([1,2,3,4]);
 ```
 
-### Check if followed by.
+### Check if followed by
 
 ```php
 $user->isFollowedBy(1);
 $user->isFollowedBy([1,2,3,4]);
 ```
 
-### Reject user ids.
+### Reject user ids
 
 ```php
 $user->follow([1,2,3]);
@@ -92,7 +89,7 @@ $user->rejectNotFollowee([1,2,3,4,5]); // [1,2,3]
 ```
 
 ```php
-$user->followers()->pluck('id'); // [1,2,3]
+$user->followers()->pluck('id')->all(); // [1,2,3]
 $user->rejectNotFollower([1,2,3,4,5]); // [1,2,3]
 ```
 
