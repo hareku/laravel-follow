@@ -67,6 +67,19 @@ trait Followable
     }
 
     /**
+     * Add followers.
+     *
+     * @param  array|int  $ids
+     * @return array
+     */
+    public function addFollowers($ids): array
+    {
+        $ids = $this->mergeFollowedAt((array) $ids);
+
+        return $this->followers()->syncWithoutDetaching($ids);
+    }
+
+    /**
      * Unfollow.
      *
      * @param  mixed  $ids

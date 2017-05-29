@@ -49,6 +49,13 @@ $user->follow(1);
 $user->follow([1,2,3,4]);
 ```
 
+### Add followers
+
+```php
+$user->addFollowers(1);
+$user->addFollowers([1,2,3,4]);
+```
+
 ### Unfollow a user or users
 
 ```php

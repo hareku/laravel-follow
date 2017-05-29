@@ -46,6 +46,36 @@ class FollowableTest extends TestCase
     }
 
     /** @test */
+    public function it_add_follower()
+    {
+        $followee = $this->createUser();
+        $follower = $this->createUser();
+
+        $followee->addFollowers($follower->id);
+
+        $this->assertDatabaseHas(config('follow.table_name'), [
+            'follower_id' => $follower->id,
+            'followee_id' => $followee->id,
+        ]);
+    }
+
+    /** @test */
+    public function it_add_many_followers()
+    {
+        $followee = $this->createUser();
+        $followers = $this->createUsers(3);
+
+        $followee->addFollowers($followers->pluck('id')->toArray());
+
+        foreach ($followers as $follower) {
+            $this->assertDatabaseHas(config('follow.table_name'), [
+                'follower_id' => $follower->id,
+                'followee_id' => $followee->id,
+            ]);
+        }
+    }
+
+    /** @test */
     public function it_follows_many_users()
     {
         $follower = $this->createUser();
