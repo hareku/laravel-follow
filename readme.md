@@ -81,6 +81,22 @@ $user->isFollowedBy(1);
 $user->isFollowedBy([1,2,3,4]);
 ```
 
+### Check if mutual follow
+
+```php
+$user->isMutual(1);
+$user->isMutual([1,2,3,4]);
+```
+
+### Get follower/followee IDs
+
+```php
+$user->follow([1,2,3]);
+$user->followerIds(); // [1,2,3]
+
+$user->followeeIds();
+```
+
 ### Reject user ids
 
 ```php

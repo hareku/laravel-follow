@@ -136,6 +136,40 @@ trait Followable
     }
 
     /**
+     * Get follower user IDs.
+     *
+     * @param  bool  $collection
+     * @return array|\Illuminate\Support\Collection
+     */
+    public function followerIds(bool $collection = false)
+    {
+        $ids = $this->follower()->pluck('id');
+
+        if ($collection) {
+            return $ids;
+        }
+
+        return $ids->toArray();
+    }
+
+    /**
+     * Get followee user IDs.
+     *
+     * @param  bool  $collection
+     * @return array|\Illuminate\Support\Collection
+     */
+    public function followeeIds(bool $collection = false)
+    {
+        $ids = $this->followee()->pluck('id');
+
+        if ($collection) {
+            return $ids;
+        }
+
+        return $ids->toArray();
+    }
+
+    /**
      * Reject IDs that is not a follower from the given array.
      *
      * @param  array  $ids
