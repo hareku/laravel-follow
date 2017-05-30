@@ -219,8 +219,8 @@ class FollowableTest extends TestCase
         $follower->follow($followee->id);
         $followee->follow($follower->id);
 
-        $this->assertTrue($follower->isMutual($followee->id));
-        $this->assertTrue($followee->isMutual($follower->id));
+        $this->assertTrue($follower->isMutualFollow($followee->id));
+        $this->assertTrue($followee->isMutualFollow($follower->id));
     }
 
     /** @test */

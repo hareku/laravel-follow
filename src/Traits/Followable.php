@@ -143,7 +143,7 @@ trait Followable
      * @param  array|int  $id
      * @return bool
      */
-    public function isMutual($id): bool
+    public function isMutualFollow($id): bool
     {
         return $this->isFollowing($id) && $this->isFollowedBy($id);
     }

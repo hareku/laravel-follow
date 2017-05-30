@@ -91,8 +91,8 @@ $user->isFollowedBy([1,2,3,4]);
 ### Check if mutual follow
 
 ```php
-$user->isMutual(1);
-$user->isMutual([1,2,3,4]);
+$user->isMutualFollow(1);
+$user->isMutualFollow([1,2,3,4]);
 ```
 
 ### Get follower/followee IDs
