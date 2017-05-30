@@ -156,7 +156,7 @@ trait Followable
      */
     public function followerIds(bool $collection = false)
     {
-        $ids = $this->follower()->pluck('id');
+        $ids = $this->follower()->pluck($this->getTable().'.id');
 
         if ($collection) {
             return $ids;
@@ -173,7 +173,7 @@ trait Followable
      */
     public function followeeIds(bool $collection = false)
     {
-        $ids = $this->followee()->pluck('id');
+        $ids = $this->followee()->pluck($this->getTable().'.id');
 
         if ($collection) {
             return $ids;
