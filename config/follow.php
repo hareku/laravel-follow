@@ -5,12 +5,7 @@ return [
     /**
      * User model
      */
-    'user' => \App\User::class,
-
-    /**
-     * Users table name
-     */
-    'users_table_name' => 'users',
+    'user' => App\User::class,
 
     /**
      * Follow relationships table name
