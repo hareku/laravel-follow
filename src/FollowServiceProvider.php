@@ -16,9 +16,6 @@ class FollowServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/follow.php' => config_path('follow.php'),
         ]);
-        $this->mergeConfigFrom(
-            __DIR__.'/../config/follow.php', 'follow'
-        );
 
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations/');
     }
@@ -30,6 +27,8 @@ class FollowServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/follow.php', 'follow'
+        );
     }
 }
