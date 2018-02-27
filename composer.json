@@ -11,8 +11,8 @@
     ],
     "require": {
         "php": ">=7.0",
-        "illuminate/database": "5.4.*",
-        "illuminate/support": "5.4.*",
+        "illuminate/database": "5.4.*|5.5.*|5.6.*",
+        "illuminate/support": "5.4.*|5.5.*|5.6.*",
         "nesbot/carbon": "~1.22"
     },
     "require-dev": {
@@ -31,5 +31,12 @@
     "config": {
         "preferred-install": "dist",
         "sort-packages": true
-    }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Hareku\\LaravelFollow\\FollowServiceProvider"
+            ]
+        }
+    },
 }
