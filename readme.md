@@ -6,7 +6,7 @@ This package helps you to add user follow system to your project.
 * Use "ON DELETE CASCADE" in follow relationships table.
 
 ## Require
-- *Support Laravel 5.4~*  
+- *Support Laravel 5.5 and 5.6 (for 5.4 use version 3.\*)*  
 - *Required php >=7.0* (v1.* >=5.6.4)
 
 ## Installation
@@ -15,7 +15,7 @@ First, pull in the package through Composer.
 
 Run `composer require hareku/laravel-follow`
 
-And then, include the service provider within `config/app.php`.
+And then, include the service provider within `config/app.php`. This step is done automatically be Laravel 5.5 and 5.6 via the Package Discovery options from Laravel.
 
 ```php
 'providers' => [
